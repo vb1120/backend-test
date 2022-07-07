@@ -1,15 +1,9 @@
-import { sequelize } from './db'
+import { initConnection, sequelize } from './db'
 import { startApp } from './startApp'
-;(async () => {
-    try {
-        await sequelize.authenticate()
-        console.log('Successfully connected to the database')
+import './controllers'
 
-        await sequelize.sync({ alter: true })
-        console.log('Models synchronized successfully')
-
+initConnection(sequelize)
+    .then(() => {
         startApp()
-    } catch (error: any) {
-        console.error(error.stack)
-    }
-})()
+    })
+    .catch((err: Error) => console.log(err.message))
